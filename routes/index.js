@@ -2,7 +2,7 @@ const router = require("express").Router();
 const path = require("path");
 const apiRoutes = require("./api");
 
-// Middlkeware
+// Middleware.
 router.use("/api", apiRoutes);
 
 // GET Route for homepage
