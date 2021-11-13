@@ -1,44 +1,30 @@
 const router = require("express").Router();
 const fs = require("fs");
-const uuidv4 = require("uuid/v4");
+const { v4: uuidv4 } = require("uuid");
+// const uid = uuidv4();
 
-// middleware package that will allow express to extract incoming data of a POST request
-// const bodyParser = require("body-parser");
-
-// // middleware for body-parser
-// router.use(bodyParser.urlencoded({extended: false}));
-// router.use(bodyParser.json());
+function uidGenerator() {
+  const userid = uuidv4();
+  console.log(userid);
+  return userid;
+}
+// var uid = uidGenerator();
 
 // We are creating a GET route for notes (URL it will be listening on is /notes)
 router.get("/notes", (req, res) => {
   const read = fs.readFileSync("db/db.json");
-  console.log("this is the read", read);
+  // console.log("this is the read", read);
   const db = JSON.parse(read);
-  console.log("this is the db", db);
+  // console.log("this is the db", db);
   const resp = res.json(db);
-  console.log("this is the resp", resp);
+  // console.log("this is the resp", resp);
 });
 
-// router.post("/notes", (req, res) => {
-//   // const sendtest = res.send("This is the send");
-//   // console.log(sendtest);
-//   // req.body;
-//   console.log("this is the req.body", req.body);
-//   const input = JSON.stringify(req.body);
-//   console.log("This is the input", input);
-
-//   fs.appendFileSync("db/db.json", input);
-
-//   // (err) => {
-//   //   if (err) {
-//   //     console.log("error occured when writing your file");
-//   //   }
-//   // });
-// });
-const writeToFile = (file, content) =>
-  fs.writeFile(file, JSON.stringify(content, null, 4), (err) =>
+const writeToFile = (file, content, id) => {
+  fs.writeFile(file, JSON.stringify(content, null, 4), id, (err) =>
     err ? console.error(err) : console.info(`\nData written to ${file}`)
   );
+};
 
 const readAndAppend = (newNote, file) => {
   fs.readFile(file, "utf8", (err, data) => {
@@ -59,6 +45,7 @@ router.post("/notes", (req, res) => {
     const newNote = {
       title,
       text,
+      id: uidGenerator(),
     };
 
     readAndAppend(newNote, "db/db.json");
