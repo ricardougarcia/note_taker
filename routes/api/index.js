@@ -18,6 +18,7 @@ router.get("/notes", (req, res) => {
   // console.log("this is the db", db);
   const resp = res.json(db);
   // console.log("this is the resp", resp);
+  return;
 });
 
 const writeToFile = (file, content, id) => {
@@ -49,7 +50,7 @@ router.post("/notes", (req, res) => {
     };
 
     readAndAppend(newNote, "db/db.json");
-    res.json(`Tip added successfully 🚀`);
+    res.json(`note added successfully 🚀`);
   } else {
     res.error("Error in adding note");
   }
